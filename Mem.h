@@ -46,13 +46,6 @@ public:
 		WriteProcessMemory(Mem::pHandle, (LPVOID)addr, data, 1, 0);
 
 		VirtualProtectEx(Mem::pHandle, (LPVOID)addr, 1, oldprotect, &oldprotect);
-
-		/*BYTE readData[8];
-		ReadProcessMemory(hProc, (void*)0x141ae0151, readData, 8, 0);
-
-		for (int i = 0; i < 10; ++i)
-			printf("%02x ", data[i]);
-		std::cout << std::endl;*/
 	}
 
 

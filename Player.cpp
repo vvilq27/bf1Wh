@@ -94,32 +94,25 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 			D3DXVECTOR3 location = mem->ReadMem<D3DXVECTOR3>(clientSoldierEntity + 0x0990);
 			float health = (float)mem->ReadMem<float>(HealthComponent + 0x0020);
 
-			//Enemy* enm = new Enemy(location, health, p->PlayerName);
-
-			//uint8_t data[2560];
-			//mem->readbuff(clientSoldierEntity, data, sizeof(data));
-
-			float distance = sqrt(pow(myLocationX - location.x, 2) + pow(myLocationY - location.z, 2));
+			//float distance = sqrt(pow(myLocationX - location.x, 2) + pow(myLocationY - location.z, 2));
 			
 
 			if (health > 0.1f ) {
 				//if(playerTeamId == myTeamId) {
 				//	std::cout << "\t\t\t";
 				//}
-				std::cout << playerIdx++ << " ";//<< playerTeamId << " ";
-				std::cout << ((std::string)p->PlayerName).substr(0, 6) << " ";
-				std::cout << std::hex << clientSoldierEntity;// << "\n";
+				//std::cout << playerIdx++ << " ";//<< playerTeamId << " ";
+				//std::cout << ((std::string)p->PlayerName).substr(0, 6) << " ";
+				//std::cout << std::hex << clientSoldierEntity;// << "\n";
 
 				
-				if (globalVars->enableCheats) {
+				if (enChts) {
 					BYTE x[] = { 0xf1 };
 					mem->writeShell(clientSoldierEntity + 0x324, x);
-					printf("cheats enabled");
 				}
-				if (globalVars->enableCheats == 0) {
+				if (enChts == 0) {
 					BYTE x[] = { 0 };
 					mem->writeShell(clientSoldierEntity + 0x324, x);
-					printf("cheats disabled");
 				}
 
 
@@ -135,21 +128,13 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 				//std::cout << "\t";//<< (float)location.x << "\t";
 				//std::cout << location.z << " ";
 				//std::cout << distance;
-				std::cout << "\n";
+				/*std::cout << "\n";*/
 			}
 		}
 
 		delete[] p->PlayerName;
 		delete p;
 	}// end for loop
-
-	
-
-	//for (Enemy * e : enemies) {
-	//	e->print();
-
-	//	delete e;
-	//}
 
 	return retValue;
 }

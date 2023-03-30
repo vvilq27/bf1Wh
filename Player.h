@@ -2,9 +2,8 @@
 #include <Windows.h>
 #include"Mem.h"
 #include<vector>
-#include "globals.h"
 
-extern Globals* globalVars;
+extern int enChts;
 
 class Player
 {

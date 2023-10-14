@@ -33,7 +33,7 @@ int main()
 	//system("cls");
 	while (true) {
 		vector<Player::PlayerInfo*> ps = playersMan->GetPlayerInVehicle();
-		Sleep(3330);
+		Sleep(3333);
 
 		if (GetAsyncKeyState(VK_F3) & 0x80000) {
 			enChts = 1;
@@ -44,6 +44,16 @@ int main()
 			printf("cheats disabled");
 			enChts = 0;
 		}
+
+		//if (enChts == 1) {
+		//	INPUT input;
+		//	input.type = INPUT_KEYBOARD;
+		//	input.ki.wVk = VK_SPACE;
+		//	input.ki.dwFlags = 0;  // Key press
+		//	SendInput(1, &input, sizeof(INPUT));
+
+		//	std::cout << "click" << std::endl;
+		//}
 			
 	}
 }

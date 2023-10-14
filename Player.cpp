@@ -105,7 +105,7 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 			float health = (float)mem->ReadMem<float>(HealthComponent + 0x0020);
 			//float distance = sqrt(pow(myLocationX - location.x, 2) + pow(myLocationY - location.z, 2));
 			
-			std::cout << p->PlayerName << std::endl;
+			//std::cout << p->PlayerName << std::endl;
 			if(p->isInVehicle ){
 			//if ( (((std::string)p->PlayerName).find("JaxWax") != std::string::npos)) {
 			
@@ -113,7 +113,6 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 			
 			//if (((uint8_t)mem->ReadMem<uint8_t>(clientSoldierEntity + 0x324) == 0xf1) || (((std::string)p->PlayerName).find("reael") != std::string::npos)) {
 				//std::cout << playerIdx++ << " ";//<< playerTeamId << " ";
-				std::cout << std::hex << p->ClientVehicleEntity << std::endl;
 
 				std::cout << std::endl;
 				std::cout << ((std::string)p->PlayerName) << std::endl;	
@@ -123,30 +122,37 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 				unsigned long long vname = mem->ReadMem<unsigned long long>(vehEntityData + 0x02f8);
 				char* vnamestring = mem->ReadMemStr(vname, 44);
 
-				if (((std::string)vnamestring).find("HORSE") != std::string::npos) {
+				/*if (((std::string)vnamestring).find("HORSE") != std::string::npos) {
 					continue;
-				}
+				}*/
 
 				
 					uint64_t vehHpComp = mem->ReadMem<Long>(p->ClientVehicleEntity + 0x1d0);
-					//uint8_t outline = mem->ReadMem<uint8_t>(p->ClientVehicleEntity + 0x324);
 
 
 					float vehHp = (float)mem->ReadMem<float>(vehHpComp + 0x0040);
 					std::cout << "vehicle hp: " << vehHp << std::endl;
 					std::cout << std::hex << vnamestring << std::endl;
+
+					//set vehicle outline
 					BYTE x[] = { 0xf1 };
 					mem->writeShell(p->ClientVehicleEntity + 0x50d, x);
 				
 
-				//for (int i = 0; i < 2 * 1024; i++) {
-					//std::cout << std::hex << static_cast<int>(buf[i]) << ",";
+				for (int i = 0; i < 2 * 1024; i++) {
+				/*	if (i == 0x50d) {
+						std::cout << std::endl;
+					}
+					std::cout << std::hex << static_cast<int>(buf[i]) << ",";
+					if (i == 0x50d) {
+						std::cout << std::endl;
+					}*/
 
-					//if (i % 32 == 0) {/*
-					//	std::cout << std::endl;
-					//	std::cout << s*/td::dec << unsigned(i) << ".\t";
-					//}
-				//}
+					/*if (i % 32 == 0) {
+						std::cout << std::endl;
+						std::cout << std::dec << unsigned(i) << ".\t";
+					}*/
+				}
 				std::cout << std::endl;
 				
 

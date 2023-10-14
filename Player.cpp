@@ -56,21 +56,28 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 		if (!ValidPointer(p))
 			continue;
 		//try to read whole player/clientPlayer data at once
-		if (((std::string)p->PlayerName).find("lKod") != std::string::npos) {
+		if (((std::string)p->PlayerName).find("lKodD") != std::string::npos) {
 			uint64_t clientSoldierEntity = mem->ReadMem<Long>(p->ClientPlayer + 0x1D48);
+			uint8_t position = mem->ReadMem<uint8_t>(clientSoldierEntity + 0x0638);
 			uint64_t HealthComponent = mem->ReadMem<Long>(clientSoldierEntity + 0x1D0);
 			D3DXVECTOR3 loc = mem->ReadMem<D3DXVECTOR3>(clientSoldierEntity + 0x0990);
+			float health = (float)mem->ReadMem<float>(HealthComponent + 0x0020);
 
 			myTeamId = mem->ReadMem<BYTE>(p->ClientPlayer + 0x1C34);
 
 			myLocationX = (float)loc.x;
 			myLocationY = (float)loc.z;
+			if (health > 0.1) {
+				std::cout << p->PlayerName << " " << myTeamId;
+				std::cout << " " << myLocationX << " ";
+				std::cout << " " << myLocationY << " ";
+				std::cout << " " << unsigned(position) << " ";
+				if (p->isInVehicle)
+					std::cout << " " << p->VehicleID << " ";
+				std::cout << " health: ";
+				std::cout << health << std::endl;
+			}
 
-			std::cout << p->PlayerName << " " << myTeamId;
-			std::cout << " "<< myLocationX << " ";
-			std::cout << " " << myLocationY << " ";
-			std::cout << " health: ";
-			std::cout << (float)mem->ReadMem<float>(HealthComponent + 0x0020) << std::endl;
 
 			retValue.push_back(p);
 		}
@@ -79,6 +86,7 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 		delete p;
 	}// end for loop
 
+	system("cls");
 
 	for (int i = 0; i < 70; i++)
 	{
@@ -88,32 +96,70 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 
 		int playerTeamId = mem->ReadMem<BYTE>(p->ClientPlayer + 0x1C34);
 
-		if (playerTeamId != myTeamId ) {
+		if (playerTeamId != myTeamId) {
 			uint64_t clientSoldierEntity = mem->ReadMem<Long>(p->ClientPlayer + 0x1D48);
 			uint64_t HealthComponent = mem->ReadMem<Long>(clientSoldierEntity + 0x1D0);
-			D3DXVECTOR3 location = mem->ReadMem<D3DXVECTOR3>(clientSoldierEntity + 0x0990);
+			uint64_t vehEntityData = mem->ReadMem<Long>(p->ClientVehicleEntity + 0x30);
+
+			//D3DXVECTOR3 location = mem->ReadMem<D3DXVECTOR3>(clientSoldierEntity + 0x0990);
 			float health = (float)mem->ReadMem<float>(HealthComponent + 0x0020);
 
 			//float distance = sqrt(pow(myLocationX - location.x, 2) + pow(myLocationY - location.z, 2));
-			
+
+			if (p->isInVehicle) {
+			//if (((uint8_t)mem->ReadMem<uint8_t>(clientSoldierEntity + 0x324) == 0xf1) || (((std::string)p->PlayerName).find("reael") != std::string::npos)) {
+				//std::cout << playerIdx++ << " ";//<< playerTeamId << " ";
+				std::cout << std::endl;
+				std::cout << ((std::string)p->PlayerName) << std::endl;	
+				//std::cout << std::hex << clientSoldierEntity << "\n";
+				uint8_t buf[256];
+				mem->readbuff(p->ClientVehicleEntity + 0x280, buf, 256);
+				unsigned long long vname = mem->ReadMem<unsigned long long>(vehEntityData + 0x02f8);
+				char* vnamestring = mem->ReadMemStr(vname, 44);
+
+				
+					uint64_t vehHpComp = mem->ReadMem<Long>(p->ClientVehicleEntity + 0x1d0);
+					uint8_t outline = mem->ReadMem<uint8_t>(p->ClientVehicleEntity + 0x324);
+
+
+					float vehHp = (float)mem->ReadMem<float>(vehHpComp + 0x0040);
+					std::cout << "vehicle hp: " << vehHp << " outline: " <<  unsigned(outline) << std::endl;
+					std::cout << std::hex << vnamestring << std::endl;
+					BYTE x[] = { 0xf1 };
+					mem->writeShell(p->ClientVehicleEntity + 0x324, x);
+				
+
+				for (int i = 0; i < 256; i++) {
+					std::cout << std::hex << static_cast<int>(buf[i]) << ",";
+
+					//if (i % 32 == 0) {/*
+					//	std::cout << std::endl;
+					//	std::cout << s*/td::dec << unsigned(i) << ".\t";
+					//}
+				}
+				std::cout << std::endl;
+				
+
+
+
+			}
 
 			if (health > 0.1f ) {
 				//if(playerTeamId == myTeamId) {
 				//	std::cout << "\t\t\t";
 				//}
-				//std::cout << playerIdx++ << " ";//<< playerTeamId << " ";
-				//std::cout << ((std::string)p->PlayerName).substr(0, 6) << " ";
-				//std::cout << std::hex << clientSoldierEntity;// << "\n";
+				
 
 				
-				if (enChts) {
+				//show enemy outlines
+				/*if (enChts) {
 					BYTE x[] = { 0xf1 };
 					mem->writeShell(clientSoldierEntity + 0x324, x);
 				}
 				if (enChts == 0) {
 					BYTE x[] = { 0 };
 					mem->writeShell(clientSoldierEntity + 0x324, x);
-				}
+				}*/
 
 
 
@@ -139,7 +185,7 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 	return retValue;
 }
 
-
+	
 /// <summary>
 /// 获得全部玩家
 /// </summary>

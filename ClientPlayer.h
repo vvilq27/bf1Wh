@@ -1,6 +1,12 @@
 #pragma once
 #include <cstdint>
 
+typedef struct D3DXVECTOR3 {
+    float x;
+    float y;
+    float z;
+} D3DXVECTOR3, * LPD3DXVECTOR3;
+
 //class ClientSoldierEntity
 //{
 //public:
@@ -17,7 +23,7 @@
 //    uint8_t poseType; //0x0638
 //    char pad_0639[176]; //0x0639
 //    uint8_t N00000538; //0x06E9
-//    uint8_t N0000022B; //0x06EA
+//    uint8_t N0000022B; //0x06EA 
 //    uint8_t occluded; //0x06EB
 //    char pad_06EC[669]; //0x06EC
 //    uint8_t N0000058C; //0x0989
@@ -40,29 +46,30 @@
 //    {
 //        return (this->occluded == false);
 //    }
-//    AxisAlignedBox GetAABB()
-//    {
-//        AxisAlignedBox aabb = AxisAlignedBox();
-//        if (this->poseType == 0) // standing
-//        {
-//            aabb.Min = D3DXVECTOR4(-0.350000f, 0.000000f, -0.350000f, 0);
-//            aabb.Max = D3DXVECTOR4(0.350000f, 1.700000f, 0.350000f, 0);
-//        }
-//        if (this->poseType == 1) // crouching
-//        {
-//            aabb.Min = D3DXVECTOR4(-0.350000f, 0.000000f, -0.350000f, 0);
-//            aabb.Max = D3DXVECTOR4(0.350000f, 1.150000f, 0.350000f, 0);
-//        }
-//        if (this->poseType == 2) // prone
-//        {
-//            aabb.Min = D3DXVECTOR4(-0.350000f, 0.000000f, -0.350000f, 0);
-//            aabb.Max = D3DXVECTOR4(0.350000f, 0.400000f, 0.350000f, 0);
-//        }
-//        return aabb;
-//    }
+
+    //AXISALIGNEDBOX GETAABB()
+    //{
+    //    AXISALIGNEDBOX AABB = AXISALIGNEDBOX();
+    //    IF (THIS->POSETYPE == 0) // STANDING
+    //    {
+    //        AABB.MIN = D3DXVECTOR4(-0.350000F, 0.000000F, -0.350000F, 0);
+    //        AABB.MAX = D3DXVECTOR4(0.350000F, 1.700000F, 0.350000F, 0);
+    //    }
+    //    IF (THIS->POSETYPE == 1) // CROUCHING
+    //    {
+    //        AABB.MIN = D3DXVECTOR4(-0.350000F, 0.000000F, -0.350000F, 0);
+    //        AABB.MAX = D3DXVECTOR4(0.350000F, 1.150000F, 0.350000F, 0);
+    //    }
+    //    IF (THIS->POSETYPE == 2) // PRONE
+    //    {
+    //        AABB.MIN = D3DXVECTOR4(-0.350000F, 0.000000F, -0.350000F, 0);
+    //        AABB.MAX = D3DXVECTOR4(0.350000F, 0.400000F, 0.350000F, 0);
+    //    }
+    //    RETURN AABB;
+    //}
 //    bool GetBonePos(int BoneId, D3DXVECTOR3* vOut);
-//
-//
+
+
 //}; //Size: 0x104C
 //
 //class ClientPlayer
@@ -129,3 +136,25 @@
 //        return *(VehicleEntityData**)((BYTE*)this + 0x30);
 //    };
 //}; //Size: 0x0048
+
+
+
+//class HealthComponent
+//{
+//public:
+//    char pad_0000[32]; //0x0000
+//    float m_Health; //0x0020
+//    float m_MaxHealth; //0x0024
+//    char pad_0028[24]; //0x0028
+//    float m_VehicleHealth; //0x0040
+//    char pad_0044[4092]; //0x0044
+//}; //Size: 0x1040
+//class VehicleEntityData
+//{
+//public:
+//    char pad_0000[504]; //0x0000
+//    float m_FrontMaxHealth; //0x01F8
+//    char pad_01FC[252]; //0x01FC
+//    char* m_namesid; //0x02F8
+//    char pad_0300[7488]; //0x0300
+//}; //Size: 0x2040

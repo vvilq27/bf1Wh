@@ -33,7 +33,7 @@ int main()
 	//system("cls");
 	while (true) {
 		vector<Player::PlayerInfo*> ps = playersMan->GetPlayerInVehicle();
-		Sleep(330);
+		Sleep(3330);
 
 		if (GetAsyncKeyState(VK_F3) & 0x80000) {
 			enChts = 1;

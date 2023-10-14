@@ -56,7 +56,7 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 		if (!ValidPointer(p))
 			continue;
 		//try to read whole player/clientPlayer data at once
-		if (((std::string)p->PlayerName).find("lKodD") != std::string::npos) {
+		if (((std::string)p->PlayerName).find("lKod") != std::string::npos) {
 			uint64_t clientSoldierEntity = mem->ReadMem<Long>(p->ClientPlayer + 0x1D48);
 			uint8_t position = mem->ReadMem<uint8_t>(clientSoldierEntity + 0x0638);
 			uint64_t HealthComponent = mem->ReadMem<Long>(clientSoldierEntity + 0x1D0);
@@ -67,7 +67,7 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 
 			myLocationX = (float)loc.x;
 			myLocationY = (float)loc.z;
-			if (health > 0.1) {
+			/*if (health > 0.1) {
 				std::cout << p->PlayerName << " " << myTeamId;
 				std::cout << " " << myLocationX << " ";
 				std::cout << " " << myLocationY << " ";
@@ -76,7 +76,7 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 					std::cout << " " << p->VehicleID << " ";
 				std::cout << " health: ";
 				std::cout << health << std::endl;
-			}
+			}*/
 
 
 			retValue.push_back(p);
@@ -93,8 +93,8 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 		PlayerInfo* p = GetPlayerById(i);
 		if (!ValidPointer(p))
 			continue;
-
-		int playerTeamId = mem->ReadMem<BYTE>(p->ClientPlayer + 0x1C34);
+			
+		int playerTeamId = mem->ReadMem<BYTE>(p->ClientPlayer + 0x1C34);		
 
 		if (playerTeamId != myTeamId) {
 			uint64_t clientSoldierEntity = mem->ReadMem<Long>(p->ClientPlayer + 0x1D48);
@@ -103,40 +103,50 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 
 			//D3DXVECTOR3 location = mem->ReadMem<D3DXVECTOR3>(clientSoldierEntity + 0x0990);
 			float health = (float)mem->ReadMem<float>(HealthComponent + 0x0020);
-
 			//float distance = sqrt(pow(myLocationX - location.x, 2) + pow(myLocationY - location.z, 2));
-
-			if (p->isInVehicle) {
+			
+			std::cout << p->PlayerName << std::endl;
+			if(p->isInVehicle ){
+			//if ( (((std::string)p->PlayerName).find("JaxWax") != std::string::npos)) {
+			
+			//if(strcmp(p->PlayerName, "AlenDelonRU\0")==0){
+			
 			//if (((uint8_t)mem->ReadMem<uint8_t>(clientSoldierEntity + 0x324) == 0xf1) || (((std::string)p->PlayerName).find("reael") != std::string::npos)) {
 				//std::cout << playerIdx++ << " ";//<< playerTeamId << " ";
+				std::cout << std::hex << p->ClientVehicleEntity << std::endl;
+
 				std::cout << std::endl;
 				std::cout << ((std::string)p->PlayerName) << std::endl;	
 				//std::cout << std::hex << clientSoldierEntity << "\n";
-				uint8_t buf[256];
-				mem->readbuff(p->ClientVehicleEntity + 0x280, buf, 256);
+				uint8_t buf[2 * 1024];
+				mem->readbuff(p->ClientVehicleEntity, buf, 2*1024);
 				unsigned long long vname = mem->ReadMem<unsigned long long>(vehEntityData + 0x02f8);
 				char* vnamestring = mem->ReadMemStr(vname, 44);
 
+				if (((std::string)vnamestring).find("HORSE") != std::string::npos) {
+					continue;
+				}
+
 				
 					uint64_t vehHpComp = mem->ReadMem<Long>(p->ClientVehicleEntity + 0x1d0);
-					uint8_t outline = mem->ReadMem<uint8_t>(p->ClientVehicleEntity + 0x324);
+					//uint8_t outline = mem->ReadMem<uint8_t>(p->ClientVehicleEntity + 0x324);
 
 
 					float vehHp = (float)mem->ReadMem<float>(vehHpComp + 0x0040);
-					std::cout << "vehicle hp: " << vehHp << " outline: " <<  unsigned(outline) << std::endl;
+					std::cout << "vehicle hp: " << vehHp << std::endl;
 					std::cout << std::hex << vnamestring << std::endl;
 					BYTE x[] = { 0xf1 };
-					mem->writeShell(p->ClientVehicleEntity + 0x324, x);
+					mem->writeShell(p->ClientVehicleEntity + 0x50d, x);
 				
 
-				for (int i = 0; i < 256; i++) {
-					std::cout << std::hex << static_cast<int>(buf[i]) << ",";
+				//for (int i = 0; i < 2 * 1024; i++) {
+					//std::cout << std::hex << static_cast<int>(buf[i]) << ",";
 
 					//if (i % 32 == 0) {/*
 					//	std::cout << std::endl;
 					//	std::cout << s*/td::dec << unsigned(i) << ".\t";
 					//}
-				}
+				//}
 				std::cout << std::endl;
 				
 
@@ -152,14 +162,14 @@ std::vector<Player::PlayerInfo*> Player::GetPlayerInVehicle()
 
 				
 				//show enemy outlines
-				/*if (enChts) {
+				if (true) {
 					BYTE x[] = { 0xf1 };
 					mem->writeShell(clientSoldierEntity + 0x324, x);
 				}
-				if (enChts == 0) {
+				else {
 					BYTE x[] = { 0 };
 					mem->writeShell(clientSoldierEntity + 0x324, x);
-				}*/
+				}
 
 
 
